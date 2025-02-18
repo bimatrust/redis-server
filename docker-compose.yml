@@ -1,5 +1,6 @@
 services:
-    redis:
+  redis:
+    container_name: redis
     image: redis:7.2-alpine
     restart: always
     user: root
@@ -16,3 +17,22 @@ services:
       retries: 10
     volumes:
       - ./docker/data/redis:/data
+      
+    # REDIS INSIGHT
+  redis_insight:
+    image: redislabs/redisinsight:1.14.0
+    user: root
+    restart: always
+    ports:
+      - $REDIS_INSIGHT_PORT:$REDIS_INSIGHT_PORT
+    volumes:
+      - ./docker/data/redis_insight:/db
+    depends_on:
+      - redis
+
+volumes:
+  redis:
+    driver: local
+  redis_insight_volume_data:
+    driver: local
+
